@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="de">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pokedex</title>
+    <link rel="icon" href="#">
+    <link rel="stylesheet" href="/node_modules/bootstrap/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/fonts.css">
+
+</head>
+
+<body onload="init()">
+    <!-- Nav -->
+    <div class="flex-between nav-bg px-4 py-2">
+        <div class="flex-center">
+            <h1>Pokedex</h1>
+            <img class="img-50 ms-2" src="img/pokeball.png" alt="">
+        </div>
+        <div>
+            <form action="">
+                <div class="input-container px-2 py-2 flex-center">
+                    <img class="img-25 me-2" src="img/lupe.png" alt="">
+                    <input class="input-field" type="text" placeholder="Suchen">
+                </div>
+            </form>
+        </div>
+        <div>
+            <img class="img-25" src="img/menu.png" alt="">
+        </div>
+    </div>
+    <!-- Body -->
+    <div class="flex-start flex-wrap">
+        <div id="charizard"></div>
+    </div>
+
+    <script src="scripts/script.js"></script>
+</body>
+
+</html>
