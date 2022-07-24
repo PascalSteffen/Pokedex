@@ -1,4 +1,7 @@
 let currentPokemon;
+let allPokemon = 1156;
+let offset = 0;
+let limit = 20;
 
 async function init() {
     await renderPokemon();
@@ -10,29 +13,37 @@ async function init() {
  * Render Charmander Pokemon
  */
 async function renderPokemon() {
-    for (let i = 1; i < 20; i++) {
-        let url = `https://pokeapi.co/api/v2/pokemon/${i}`;
-        let response = await fetch(url);
-        let currentPokemon = await response.json();
-        let types = currentPokemon['types'];
-        let pokemons = document.getElementById('pokemons');
-        let pokedexId = currentPokemon['id'];
-        pokemons.innerHTML += generateCurrentPokemonContainer(currentPokemon, i, pokedexId);
+    let url = `https://pokeapi.co/api/v2/pokemon/?offset=${offset}&limit=${limit}`;
+    let response = await fetch(url);
+    let currentPokemon = await response.json();
 
-        for (let j = 0; j < types.length; j++) {
-            let pokemonClassInPopUp = document.getElementById(`pokemonClassInPopUp${i}`);
-            let pokemonClass = document.getElementById(`pokemonClass${i}`);
+    for (let i = 0; i < currentPokemon['results'].length; i++) {
+        const element = currentPokemon['results'][i]['url'];
+        const response = await fetch(element);
+        const responsetAsJSON = await response.json();
+        console.log(responsetAsJSON['types']);
 
-            pokemonClass.innerHTML += generateCurrentPokemonHTMLClass(currentPokemon, j);
-            pokemonClassInPopUp.innerHTML += generateCurrentPokemonHTMLClass(currentPokemon, j);
+    }
 
-            pokemonColorChange(currentPokemon, i);
-        }
+    let types = currentPokemon['types'];
+    let pokedexId = currentPokemon['id'];
 
-        if (pokedexId > 0 && pokedexId < 10) {
-            document.getElementById(`newPokedexId${i}`).innerHTML = `0${pokedexId}`;
-            document.getElementById(`newPokedexIdInPopUp${i}`).innerHTML = `0${pokedexId}`;
-        }
+    let pokemons = document.getElementById('pokemons');
+    pokemons.innerHTML += generateCurrentPokemonContainer(currentPokemon, pokedexId);
+
+    for (let j = 0; j < types.length; j++) {
+        let pokemonClassInPopUp = document.getElementById(`pokemonClassInPopUp${i}`);
+        let pokemonClass = document.getElementById(`pokemonClass${i}`);
+
+        pokemonClass.innerHTML += generateCurrentPokemonHTMLClass(currentPokemon, j);
+        pokemonClassInPopUp.innerHTML += generateCurrentPokemonHTMLClass(currentPokemon, j);
+
+        pokemonColorChange(currentPokemon, i);
+    }
+
+    if (pokedexId > 0 && pokedexId < 10) {
+        document.getElementById(`newPokedexId${i}`).innerHTML = `0${pokedexId}`;
+        document.getElementById(`newPokedexIdInPopUp${i}`).innerHTML = `0${pokedexId}`;
     }
 
 }
