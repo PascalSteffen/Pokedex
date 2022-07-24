@@ -204,14 +204,92 @@ body {
     opacity: 0.5;
 }
 
+.pop-up-Container {
+    position: fixed;
+    z-index: 99999;
+    background-color: rgba(0, 0, 0, 0.5);
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+}
+
+.pop-up-inline-container {
+    background-color: white;
+    width: 400px;
+    height: 800px;
+    border-radius: 25px;
+}
+
+.pokedex-id-pop-up {
+    position: absolute;
+    top: 310px;
+    right: 0;
+    font-size: 50px;
+    font-family: 'Teko', 'sans-serif';
+    opacity: 0.5;
+    color: white;
+}
+
+.position {
+    position: relative;
+}
+
+.stats-bg {
+    z-index: 1;
+    background-color: white;
+    border-top-left-radius: 50px;
+    border-top-right-radius: 50px;
+    height: 420px;
+    border-radius: 25px;
+}
+
+.name-in-pop-up {
+    color: white;
+    margin: 0;
+}
+
+.next-img {
+    position: absolute;
+    top: 200px;
+    right: 0;
+    cursor: pointer;
+    width: 30px;
+    opacity: 0.5;
+}
+
+.back-img {
+    position: absolute;
+    top: 200px;
+    left: 0;
+    cursor: pointer;
+    width: 30px;
+    opacity: 0.5;
+    transition: all 225ms ease-in-out;
+}
+
+.cross-img {
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 30px;
+    cursor: pointer;
+    opacity: 0.5;
+    transition: all 225ms ease-in-out;
+}
+
+.next-img:hover, .back-img:hover, .cross-img:hover {
+    opacity: 1;
+    transition: all 225ms ease-in-out;
+}
 
 /* Color Classes */
 .fire-class {
-    background-color: rgb(252, 108, 109);
+    background-color: rgb(252, 108, 109) !important;
 }
 
 .grass-class {
-    background-color: rgb(109, 187, 71);
+    background-color: rgb(109, 187, 71) !important;
 }
 
 .poisen-class {
