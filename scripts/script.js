@@ -8,6 +8,18 @@ async function init() {
 
 }
 
+window.onscroll = async function () {
+    var d = document.documentElement;
+    var height1 = d.scrollTop + window.innerHeight;
+    var height = d.offsetHeight;
+
+    if (height1 == height) {
+        offset += 20;
+        limit += 20;
+        await renderPokemon();
+    }
+
+};
 
 /**
  * Rendert alle Pokemon
@@ -24,11 +36,12 @@ async function renderPokemon() {
         const responsetAsJSON = await response.json();
         const pokedexId = responsetAsJSON['id'];
 
-        pokemons.innerHTML += generateCurrentPokemonContainer(responsetAsJSON, i, pokedexId);
-        renderPokemonStats(responsetAsJSON, i);
-        renderPokemonTypes(responsetAsJSON, i, pokedexId);
+        pokemons.innerHTML += await generateCurrentPokemonContainer(responsetAsJSON, i, pokedexId);
+        await renderPokemonStats(responsetAsJSON, i);
+        await renderPokemonTypes(responsetAsJSON, i, pokedexId);
 
     }
+
 }
 
 
@@ -38,16 +51,16 @@ async function renderPokemon() {
  * @param {*} i - Holt sich die jeweilige Stelle aus dem JSON.
  * @param {*} pokedexId - Holt sich die jeweilige ID.
  */
-function renderPokemonTypes(responsetAsJSON, i, pokedexId) {
+async function renderPokemonTypes(responsetAsJSON, i, pokedexId) {
     const types = responsetAsJSON['types'];
 
     for (let j = 0; j < types.length; j++) {
         let pokemonClassInPopUp = document.getElementById(`pokemonClassInPopUp${i}`);
         let pokemonClass = document.getElementById(`pokemonClass${i}`);
 
-        pokemonClass.innerHTML += generateCurrentPokemonHTMLClass(responsetAsJSON, j);
-        pokemonClassInPopUp.innerHTML += generateCurrentPokemonHTMLClass(responsetAsJSON, j);
-        pokemonColorChange(responsetAsJSON, i);
+        pokemonClass.innerHTML += await generateCurrentPokemonHTMLClass(responsetAsJSON, j);
+        pokemonClassInPopUp.innerHTML += await generateCurrentPokemonHTMLClass(responsetAsJSON, j);
+        await pokemonColorChange(responsetAsJSON, i);
     }
 
     if (pokedexId > 0 && pokedexId < 10) {
@@ -57,35 +70,35 @@ function renderPokemonTypes(responsetAsJSON, i, pokedexId) {
 }
 
 
-function renderPokemonStats(responsetAsJSON, i) {
+async function renderPokemonStats(responsetAsJSON, i) {
     const stats = responsetAsJSON['stats'];
 
     for (let k = 0; k < stats.length; k++) {
         let pokemonStats = document.getElementById(`pokemonStats${i}`)
         let statName = stats[k]['stat']['name'].charAt(0).toUpperCase() + stats[k]['stat']['name'].slice(1);
         pokemonStats.innerHTML += /*html*/ `
-            <div>
-                <div class="flex-center my-1">
-                    <span>${statName} (${stats[k]['base_stat']})</span>
-                </div>
-                <div class="progress">
-                    <div class="progress-bar progress-bar-striped progress-bar-animated bg-black " role="progressbar" aria-label="Animated striped example" aria-valuenow="${stats[k]['base_stat']}" aria-valuemin="0" aria-valuemax="100" style="width: ${stats[k]['base_stat']}%"></div>
-                </div>
-            </div>`
+        <div>
+            <div class="flex-center my-1">
+                <span>${statName} (${stats[k]['base_stat']})</span>
+            </div>
+            <div class="progress">
+                <div class="progress-bar progress-bar-striped progress-bar-animated bg-black " role="progressbar" aria-label="Animated striped example" aria-valuenow="${stats[k]['base_stat']}" aria-valuemin="0" aria-valuemax="100" style="width: ${stats[k]['base_stat']}%"></div>
+            </div>
+        </div>`
     }
-} 
+}
+
 
 /**
  * Rendert den Namen und das Bild des Pokemons
  * @param {*} responsetAsJSON - JSON aus der "renderPokemon" function.
  * @returns 
  */
-function generateCurrentPokemonContainer(responsetAsJSON, i, pokedexId) {
+async function generateCurrentPokemonContainer(responsetAsJSON, i, pokedexId) {
     let PokemonName = responsetAsJSON['name'].charAt(0).toUpperCase() + responsetAsJSON['name'].slice(1);
     let PokemonHeight = responsetAsJSON['weight'] / 100;
     let PokemonWeight = responsetAsJSON['weight'] / 10;
     return /*html*/ `
-
     <!-- Modal -->
     <div id="popUp${i}" class="d-none">
         <div class="pop-up-Container flex-center">
@@ -98,7 +111,7 @@ function generateCurrentPokemonContainer(responsetAsJSON, i, pokedexId) {
                     <img onclick="closePopUp(${i})" class="cross-img" src="img/cross.png" alt="">
                 </div>
                 <div class="flex-column">
-                    <img class="img-250" src="${responsetAsJSON['sprites']['other']['official-artwork']['front_default']}" alt="">
+                    <img class="img-200" src="${responsetAsJSON['sprites']['other']['official-artwork']['front_default']}" alt="">
                     <div class="flex-center" id="pokemonClassInPopUp${i}"></div>
                 </div>
                 <div class="stats-bg px-3">
@@ -112,7 +125,7 @@ function generateCurrentPokemonContainer(responsetAsJSON, i, pokedexId) {
                             <span>${PokemonWeight.toFixed(2).replace('.', ',')} kg</span>
                         </div>
                     </div>
-                    <div class="flex-center">
+                    <div class="flex-center mt-2">
                         <span class="stats-headline">Basis-Statistik</span>
                     </div>
                     <div>
@@ -122,7 +135,7 @@ function generateCurrentPokemonContainer(responsetAsJSON, i, pokedexId) {
             </div>
         </div>
     </div>
-
+    <!-- Normal Container -->
     <div onclick="openPopUp(${i})" id="classColor${i}" class="target-container flex-start mx-5 my-4 px-4 py-4">
         <div class="flex-column-start">
             <h1><b>${PokemonName}</b></h1>
@@ -145,12 +158,12 @@ function generateCurrentPokemonContainer(responsetAsJSON, i, pokedexId) {
  * @param {*} i - Holt sich die Anzahl der Klassen des jeweiligen Pokemons.
  * @returns 
  */
-function generateCurrentPokemonHTMLClass(responsetAsJSON, j) {
+async function generateCurrentPokemonHTMLClass(responsetAsJSON, j) {
     let newClass = responsetAsJSON['types'][j]['type']['name'].charAt(0).toUpperCase() + responsetAsJSON['types'][j]['type']['name'].slice(1);
     return /*html*/ `
-        <div class="my-2 flex-start">
-            <span class="target-container-child mx-2 px-3 py-1">${newClass}</span>
-        </div>`
+    <div class="my-2 flex-start">
+        <span class="target-container-child mx-2 px-3 py-1">${newClass}</span>
+    </div>`
 }
 
 
@@ -159,10 +172,9 @@ function generateCurrentPokemonHTMLClass(responsetAsJSON, j) {
  * @param {*} responsetAsJSON - JSON aus der "renderChrizard()" function.
  * @param {*} i - Holt die Mainfarbe des jeweiligen Pokemons aus dem Array.
  */
-function pokemonColorChange(responsetAsJSON, i) {
+async function pokemonColorChange(responsetAsJSON, i) {
     let classColor = document.getElementById(`classColor${i}`);
     let classColorInPopUp = document.getElementById(`classColorInPopUp${i}`)
-    let progressColor = document.getElementById(`progressColor${i}`);
     if (responsetAsJSON['types'][0]['type']['name'] == 'fire') {
         classColor.classList.add("fire-class");
         classColorInPopUp.classList.add("fire-class");
@@ -223,11 +235,13 @@ function closePopUp(i) {
     document.getElementById(`popUp${i}`).classList.add("d-none");
 }
 
-function nextPokemon(i, pokedexId) {
+function nextPokemon(i, responsetAsJSON) {
     i += 1;
-    if (i >= pokedexId.length) {
+    if (i >= responsetAsJSON.length) {
         i = 0;
     }
+
+    renderPokemon();
 }
 
 function lastPokemon() {
