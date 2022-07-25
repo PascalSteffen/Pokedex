@@ -283,6 +283,23 @@ body {
     transition: all 225ms ease-in-out;
 }
 
+.underline {
+    border-bottom: 1px solid lightgray;
+}
+
+.stats-headline {
+    font-weight: bold;
+    font-size: 24px;
+}
+
+.rightline {
+    border-right: 1px solid lightgray;
+}
+
+.bg-black {
+    background-color: rgba(0,0,0,0.5) !important;
+}
+
 /* Color Classes */
 .fire-class {
     background-color: rgb(252, 108, 109) !important;
