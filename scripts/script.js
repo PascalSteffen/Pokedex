@@ -1,25 +1,35 @@
 let currentPokemon;
-let allPokemon = 1156;
+let responsetAsJSON;
+let pokedexId;
+let allPokemons = 1;
 let offset = 0;
 let limit = 20;
+let loading = false;
 
 async function init() {
     await renderPokemon();
 
 }
 
-window.onscroll = async function () {
-    var d = document.documentElement;
-    var height1 = d.scrollTop + window.innerHeight;
-    var height = d.offsetHeight;
+window.onscroll = async function(){
+    if(window.scrollY + window.innerHeight >= document.body.clientHeight) {
+        if (!loading) {
+            loading = true;
+            offset += 20;
+            limit += 20; 
+            for (i = offset; i < limit; i++) {
+                let url = `https://pokeapi.co/api/v2/pokemon/?offset=${offset}&limit=${limit}`;
+                let response = await fetch(url);
+                currentPokemon = await response.json();
+                pokemons.innerHTML += await generateCurrentPokemonContainer(i);
+                await renderPokemonStats(i);
+                await renderPokemonTypes(i);
 
-    if (height1 == height) {
-        offset += 20;
-        limit += 20;
-        await renderPokemon();
+            }
+            loading = false;
+        }
     }
-
-};
+}
 
 /**
  * Rendert alle Pokemon
@@ -27,20 +37,20 @@ window.onscroll = async function () {
 async function renderPokemon() {
     let url = `https://pokeapi.co/api/v2/pokemon/?offset=${offset}&limit=${limit}`;
     let response = await fetch(url);
-    let currentPokemon = await response.json();
+    currentPokemon = await response.json();
     let pokemons = document.getElementById('pokemons');
 
     for (let i = 0; i < currentPokemon['results'].length; i++) {
         const element = currentPokemon['results'][i]['url'];
         const response = await fetch(element);
-        const responsetAsJSON = await response.json();
-        const pokedexId = responsetAsJSON['id'];
+        responsetAsJSON = await response.json();
+        pokedexId = responsetAsJSON['id'];
 
-        pokemons.innerHTML += await generateCurrentPokemonContainer(responsetAsJSON, i, pokedexId);
-        await renderPokemonStats(responsetAsJSON, i);
-        await renderPokemonTypes(responsetAsJSON, i, pokedexId);
-
+        pokemons.innerHTML += await generateCurrentPokemonContainer(i);
+        await renderPokemonStats(i);
+        await renderPokemonTypes(i);
     }
+
 
 }
 
@@ -51,16 +61,16 @@ async function renderPokemon() {
  * @param {*} i - Holt sich die jeweilige Stelle aus dem JSON.
  * @param {*} pokedexId - Holt sich die jeweilige ID.
  */
-async function renderPokemonTypes(responsetAsJSON, i, pokedexId) {
+async function renderPokemonTypes(i) {
     const types = responsetAsJSON['types'];
 
     for (let j = 0; j < types.length; j++) {
         let pokemonClassInPopUp = document.getElementById(`pokemonClassInPopUp${i}`);
         let pokemonClass = document.getElementById(`pokemonClass${i}`);
 
-        pokemonClass.innerHTML += await generateCurrentPokemonHTMLClass(responsetAsJSON, j);
-        pokemonClassInPopUp.innerHTML += await generateCurrentPokemonHTMLClass(responsetAsJSON, j);
-        await pokemonColorChange(responsetAsJSON, i);
+        pokemonClass.innerHTML += await generateCurrentPokemonHTMLClass(j);
+        pokemonClassInPopUp.innerHTML += await generateCurrentPokemonHTMLClass(j);
+        await pokemonColorChange(i);
     }
 
     if (pokedexId > 0 && pokedexId < 10) {
@@ -70,7 +80,7 @@ async function renderPokemonTypes(responsetAsJSON, i, pokedexId) {
 }
 
 
-async function renderPokemonStats(responsetAsJSON, i) {
+async function renderPokemonStats(i) {
     const stats = responsetAsJSON['stats'];
 
     for (let k = 0; k < stats.length; k++) {
@@ -94,7 +104,7 @@ async function renderPokemonStats(responsetAsJSON, i) {
  * @param {*} responsetAsJSON - JSON aus der "renderPokemon" function.
  * @returns 
  */
-async function generateCurrentPokemonContainer(responsetAsJSON, i, pokedexId) {
+async function generateCurrentPokemonContainer(i) {
     let PokemonName = responsetAsJSON['name'].charAt(0).toUpperCase() + responsetAsJSON['name'].slice(1);
     let PokemonHeight = responsetAsJSON['weight'] / 100;
     let PokemonWeight = responsetAsJSON['weight'] / 10;
@@ -107,7 +117,7 @@ async function generateCurrentPokemonContainer(responsetAsJSON, i, pokedexId) {
                     <h1 class="name-in-pop-up">${PokemonName}</h1>
                     <span class="pokedex-id-pop-up" id="newPokedexIdInPopUp${i}">${pokedexId}</span>
                     <img onclick="nextPokemon(${i})" class="next-img" src="img/next.png" alt="">
-                    <img class="back-img" src="img/back.png" alt="">
+                    <img onclick ="lastPokemon(${i})"class="back-img" src="img/back.png" alt="">
                     <img onclick="closePopUp(${i})" class="cross-img" src="img/cross.png" alt="">
                 </div>
                 <div class="flex-column">
@@ -154,11 +164,11 @@ async function generateCurrentPokemonContainer(responsetAsJSON, i, pokedexId) {
 
 /**
  * Rendert die Klassen des Pokemons
- * @param {*} responsetAsJSON -JSON aus der "renderChrizard()" function.
+ * @param {*} responsetAsJSON - JSON aus der "renderPokemon" function.
  * @param {*} i - Holt sich die Anzahl der Klassen des jeweiligen Pokemons.
  * @returns 
  */
-async function generateCurrentPokemonHTMLClass(responsetAsJSON, j) {
+async function generateCurrentPokemonHTMLClass(j) {
     let newClass = responsetAsJSON['types'][j]['type']['name'].charAt(0).toUpperCase() + responsetAsJSON['types'][j]['type']['name'].slice(1);
     return /*html*/ `
     <div class="my-2 flex-start">
@@ -169,10 +179,10 @@ async function generateCurrentPokemonHTMLClass(responsetAsJSON, j) {
 
 /**
  * Farbdarstellung aller Klassen.
- * @param {*} responsetAsJSON - JSON aus der "renderChrizard()" function.
+ * @param {*} responsetAsJSON - JSON aus der "renderPokemon" function.
  * @param {*} i - Holt die Mainfarbe des jeweiligen Pokemons aus dem Array.
  */
-async function pokemonColorChange(responsetAsJSON, i) {
+async function pokemonColorChange(i) {
     let classColor = document.getElementById(`classColor${i}`);
     let classColorInPopUp = document.getElementById(`classColorInPopUp${i}`)
     if (responsetAsJSON['types'][0]['type']['name'] == 'fire') {
@@ -235,15 +245,25 @@ function closePopUp(i) {
     document.getElementById(`popUp${i}`).classList.add("d-none");
 }
 
-function nextPokemon(i, responsetAsJSON) {
+
+function nextPokemon(i) {
+    closePopUp(i);
     i += 1;
-    if (i >= responsetAsJSON.length) {
+    if (i >= currentPokemon['results'].length) {
         i = 0;
     }
-
-    renderPokemon();
+    openPopUp(i);
 }
 
-function lastPokemon() {
 
+function lastPokemon(i) {
+    closePopUp(i);
+    i -= 1;
+    if (i >= currentPokemon['results'].length) {
+        i = 0;
+    }
+    if (i < 0) {
+        i = currentPokemon['results'].length - 1;
+    }
+    openPopUp(i);
 }
