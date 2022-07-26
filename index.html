@@ -14,25 +14,27 @@
 </head>
 
 <body onload="init()">
-    
+
     <!-- Nav -->
-    <div class="flex-between nav-bg px-4 py-2">
+    <div class="flex-between nav-bg px-4 py-2 pos-fixed">
         <div class="flex-center">
             <h1 class="headline">Pokedex</h1>
             <img class="img-50 ms-2" src="img/pokeball.png" alt="">
         </div>
         <div>
-            <form action="">
-                <div class="input-container px-2 py-2 flex-center">
-                    <img class="img-25 me-2" src="img/lupe.png" alt="">
-                    <input id="search" onchange="filterNames()" class="input-field" type="text" placeholder="Pokemon suchen..">
-                </div>
-            </form>
+            <div class="input-container px-2 py-2 flex-center">
+                <img class="img-25 me-2" src="img/lupe.png" alt="">
+                <input id="search" onchange="filterNames()" class="input-field" type="text"
+                    placeholder="Pokemon suchen..">
+            </div>
         </div>
     </div>
 
     <!-- Body -->
-    <div class="flex-center flex-wrap" id="pokemons"></div>
+    <div class="margin-top">
+        <div class="flex-center flex-wrap" id="pokemons"></div>
+    </div>
+
 
 
     <script src="scripts/script.js"></script>

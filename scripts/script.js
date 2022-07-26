@@ -1,13 +1,7 @@
 let currentPokemon;
 let pokedexId;
 let allPokemons = 20;
-let complePokedex = 1154;
 let loading = false;
-
-async function init() {
-    await renderPokemon();
-
-}
 
 window.onscroll = async function () {
     if (window.scrollY + window.innerHeight >= document.body.clientHeight) {
@@ -29,6 +23,13 @@ window.onscroll = async function () {
         }
     }
 }
+
+
+async function init() {
+    await renderPokemon();
+
+}
+
 
 /**
  * Rendert alle Pokemon
@@ -265,19 +266,26 @@ function lastPokemon(i) {
 }
 
 
+/*###############################################################################################################################################################*/
+
+
 /**
  * Search function
  */
- async function filterNames() {
+async function filterNames() {
     let search = document.getElementById("search").value;
     search = search.toLowerCase();
-    let url = `https://pokeapi.co/api/v2/pokemon/1154`;
-    let response = await fetch(url);
-    currentPokemon = await response.json();
-
-    for (let i = 0; i < currentPokemon; i++) {
-        let numberOfNames = currentPokemon[i]['name'];
+    pokemons.innerHTML = "";
+    for (let i = 1; i < allPokemons; i++) {
+        let url = `https://pokeapi.co/api/v2/pokemon/${i}`;
+        let response = await fetch(url);
+        currentPokemon = await response.json();
+        let numberOfNames = currentPokemon['name'];
         if (numberOfNames.toLowerCase().includes(search)) {
+            pokedexId = currentPokemon['id'];
+            pokemons.innerHTML += await generateCurrentPokemonContainer(i);
+            await renderPokemonStats(i);
+            await renderPokemonTypes(i);
         }
-    } // Todo: Fertigstellen. 
- }
+    }
+}
