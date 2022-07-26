@@ -3,9 +3,13 @@ let pokedexId;
 let allPokemons = 20;
 let loading = false;
 
+function isScrolled() {
+    return window.scrollY + window.innerHeight >= document.body.clientHeight && !loading; // Berechnet wie viel Vertikal gesrcolled.
+}
+
+
 window.onscroll = async function () {
-    if (window.scrollY + window.innerHeight >= document.body.clientHeight) {
-        if (!loading) {
+    if (isScrolled()) {
             loading = true;
             let nextPokemons = allPokemons + 5;
             for (i = allPokemons; i < nextPokemons; i++) {
@@ -16,11 +20,9 @@ window.onscroll = async function () {
                 pokemons.innerHTML += await generateCurrentPokemonContainer(i);
                 await renderPokemonStats(i);
                 await renderPokemonTypes(i);
-
             }
             allPokemons += 5;
             loading = false;
-        }
     }
 }
 
