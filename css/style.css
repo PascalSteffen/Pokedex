@@ -318,68 +318,115 @@ body {
 }
 
 /* Color Classes */
-.fire-class {
+.fire {
     background-color: rgb(252, 108, 109);
 }
 
-.grass-class {
+.grass {
     background-color: rgb(109, 187, 71);
 }
 
-.poisen-class {
+.bug {
+    background-color: rgb(109, 187, 71);
+}
+
+.poison {
     background-color: rgb(161, 87, 179);
 }
 
-.water-class {
+.water {
     background-color: rgb(48, 136, 207);
 }
 
-.normal-class {
+.normal {
     background-color: lightgrey;
 }
 
-.electric-class {
+.electric {
     background-color: rgb(232, 193, 0);
 }
 
-.ground-class {
+.ground {
     background-color: rgb(217, 102, 44);
 }
 
-.fairy-class {
+.fairy {
     background-color: rgb(235, 137, 158);
 }
 
-.fighting-class {
+.fighting {
     background-color: rgb(174, 43, 36);
 }
 
-.ghost-class {
+.ghost {
     background-color: rgb(97, 73, 172);
 }
 
-.rock-class {
+.rock {
     background-color: rgb(193, 174, 120);
 }
 
-.psychic-class {
+.psychic {
     background-color: rgb(255, 84, 101);
 }
 
-.dragon-class {
+.dragon {
     background-color: darkgrey;
 }
 
-.ice-class {
+.ice {
     background-color: rgb(147, 206, 255);
 }
 
 /* Responsive */
 
-@media (min-width: 792px) {
+@media (min-width: 792px) and (max-width: 1023px) {
     .target-container {
         width: 270px;
     }
+
+    .img-200 {
+        width: 175px;
+    }
+
+    .stats-bg {
+        height: 435px;
+    }
+
+    .progress {
+        --bs-progress-height: 0.2rem;
+    }
+
+    .pop-up-inline-container {
+        height: 598px;
+    }
+}
+
+@media (min-width: 1024px) and (max-width: 1024px) {
+    .img-200 {
+        width: 110px;
+    }
+
+    .stats-bg {
+        height: 348px;
+    }
+
+    .next-img {
+        top: 150px;
+    }
+    
+    .back-img {
+        top: 150px;
+    }
+    
+    .progress {
+        --bs-progress-height: 0.2rem;
+    }
+
+    .pop-up-inline-container {
+        height: 598px;
+    }
+
 }
 
 

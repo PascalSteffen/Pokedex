@@ -27,7 +27,6 @@ window.onscroll = async function () {
 
 async function init() {
     await renderPokemon();
-
 }
 
 
@@ -47,8 +46,6 @@ async function renderPokemon() {
         await renderPokemonStats(i);
         await renderPokemonTypes(i);
     }
-
-
 }
 
 
@@ -182,49 +179,8 @@ async function generateCurrentPokemonHTMLClass(j) {
 async function pokemonColorChange(i) {
     let classColor = document.getElementById(`classColor${i}`);
     let classColorInPopUp = document.getElementById(`classColorInPopUp${i}`)
-    if (currentPokemon['types'][0]['type']['name'] == 'fire') {
-        classColor.classList.add("fire-class");
-        classColorInPopUp.classList.add("fire-class");
-    } else if (currentPokemon['types'][0]['type']['name'] == 'grass' || currentPokemon['types'][0]['type']['name'] == 'bug') {
-        classColor.classList.add("grass-class");
-        classColorInPopUp.classList.add("grass-class");
-    } else if (currentPokemon['types'][0]['type']['name'] == 'poison') {
-        classColor.classList.add("poisen-class");
-        classColorInPopUp.classList.add("poisen-class");
-    } else if (currentPokemon['types'][0]['type']['name'] == 'water') {
-        classColor.classList.add("water-class");
-        classColorInPopUp.classList.add("water-class");
-    } else if (currentPokemon['types'][0]['type']['name'] == 'normal') {
-        classColor.classList.add("normal-class");
-        classColorInPopUp.classList.add("normal-class");
-    } else if (currentPokemon['types'][0]['type']['name'] == 'electric') {
-        classColor.classList.add("electric-class");
-        classColorInPopUp.classList.add("electric-class");
-    } else if (currentPokemon['types'][0]['type']['name'] == 'ground') {
-        classColor.classList.add("ground-class");
-        classColorInPopUp.classList.add("ground-class");
-    } else if (currentPokemon['types'][0]['type']['name'] == 'fairy') {
-        classColor.classList.add("fairy-class");
-        classColorInPopUp.classList.add("fairy-class");
-    } else if (currentPokemon['types'][0]['type']['name'] == 'fighting') {
-        classColor.classList.add("fighting-class");
-        classColorInPopUp.classList.add("fighting-class");
-    } else if (currentPokemon['types'][0]['type']['name'] == 'ghost') {
-        classColor.classList.add("ghost-class");
-        classColorInPopUp.classList.add("ghost-class");
-    } else if (currentPokemon['types'][0]['type']['name'] == 'rock') {
-        classColor.classList.add("rock-class");
-        classColorInPopUp.classList.add("rock-class");
-    } else if (currentPokemon['types'][0]['type']['name'] == 'psychic') {
-        classColor.classList.add("psychic-class");
-        classColorInPopUp.classList.add("psychic-class");
-    } else if (currentPokemon['types'][0]['type']['name'] == 'dragon') {
-        classColor.classList.add("dragon-class");
-        classColorInPopUp.classList.add("dragon-class");
-    } else if (currentPokemon['types'][0]['type']['name'] == 'ice') {
-        classColor.classList.add("ice-class");
-        classColorInPopUp.classList.add("ice-class");
-    }
+    classColor.classList.add(currentPokemon['types'][0]['type']['name']);
+    classColorInPopUp.classList.add(currentPokemon['types'][0]['type']['name']);
 }
 
 
