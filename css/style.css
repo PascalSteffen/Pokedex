@@ -414,11 +414,11 @@ body {
     .next-img {
         top: 150px;
     }
-    
+
     .back-img {
         top: 150px;
     }
-    
+
     .progress {
         --bs-progress-height: 0.2rem;
     }
